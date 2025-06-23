@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: WeChat MiniProgram API
+  version: 1.0.0
+
+paths:
+  /sns/jscode2session:
+    get:
+      summary: 获取 session_key 和 openid
+      operationId: code2Session
+      parameters:
+        - name: appid
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: secret
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: js_code
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: grant_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [authorization_code]
+      responses:
+        '200':
+          description: 成功返回 session_key 和 openid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Code2SessionResponse'
+
+  /wxa/business/getuserphonenumber:
+    post:
+      summary: 获取手机号
+      operationId: getUserPhone
+      parameters:
+        - name: access_token
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPhoneRequest'
+      responses:
+        '200':
+          description: 获取手机号结果
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPhoneResponse'
+
+components:
+  schemas:
+    Code2SessionResponse:
+      type: object
+      properties:
+        session_key:
+          type: string
+        unionid:
+          type: string
+        errmsg:
+          type: string
+        openid:
+          type: string
+        errcode:
+          type: integer
+
+    GetPhoneRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        openid:
+          type: string
+
+    GetPhoneResponse:
+      type: object
+      properties:
+        errcode:
+          type: integer
+        errmsg:
+          type: string
+        phone_info:
+          $ref: '#/components/schemas/PhoneInfo'
+
+    PhoneInfo:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+        purePhoneNumber:
+          type: string
+        countryCode:
+          type: string
+        watermark:
+          $ref: '#/components/schemas/Watermark'
+
+    Watermark:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+        appid:
+          type: string

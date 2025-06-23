@@ -1,0 +1,13 @@
+db:
+  host: localhost
+  port: 54322
+  user: xx
+  password: $DB_PASSWORD
+  dbname: xt
+  sslmode: disable
+  max_open_conn: 200
+  max_idle_conn: 5
+  conn_max_lifetime: 5min
+server:
+  port: 8080
+  host: 127.0.0.1

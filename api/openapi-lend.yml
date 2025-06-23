@@ -1,0 +1,52 @@
+openapi: 3.0.2
+
+info:
+  version: 1.0.0
+  title: my-project
+  description: '用户接口'
+servers:
+  - url: http://localhost:20240
+    description: 本地测试
+paths:
+  /api/lend/v1/biz/out:
+    x-ogen-operation-group: LendBiz
+    post:
+      operationId: LendOut
+      tags:
+        - LendBiz
+      description: 登录
+      requestBody:
+        description: 微信登录参数
+        content:
+          application/json:
+            schema:
+              required:
+                - login_code
+              properties:
+                login_code:
+                  type: string
+                  description: 微信登录授权码 https://developers.weixin.qq.com/miniprogram/dev/api/open-api/login/wx.login.html
+      responses:
+        '200':
+          description: 租车点优惠券信息
+          content:
+            application/json:
+              schema:
+                type: object
+                title: LendOutResp
+                properties:
+                  user_info:
+                    $ref: './schemas/user.yml#/components/schemas/User'
+                  access_token:
+                    type: string
+                    description: 访问令牌
+                  message:
+                    type: string
+                    description: 消息
+                  code:
+                    type: string
+                    description: 错误码
+                    default: SUCCESS
+                    enum:
+                      - SUCCESS
+                      - UNBIND_PHONE

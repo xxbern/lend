@@ -1,0 +1,119 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Ebike
+  description: 通用交互对象
+
+components:
+  schemas:
+    CommonCode:
+      type: string
+      default: SUCCESS
+      description: >
+        dictionary:
+        * SUCCESS    成功
+        * UNAUTHORIZED    未认证
+        * ACCESS_DENIED    无权限
+        * ILLEGAL_PARAM    非法参数
+        * TOO_FREQUENT    请求频繁
+        * NOT_FOUND    未找到对象
+        * CONFLICT    操作冲突
+        * TIMEOUT    请求超时
+        * DATA_LARGE    数据太多
+        * UNSUPPORTED_MEDIA_TYPE  不支持的请求内容
+        * ILLEGAL_CLIENT 非法客户端
+        * UNKNOWN 未知错误
+      enum:
+        - SUCCESS
+        - UNAUTHORIZED
+        - ACCESS_DENIED
+        - ILLEGAL_PARAM
+        - TOO_FREQUENT
+        - NOT_FOUND
+        - CONFLICT
+        - TIMEOUT
+        - DATA_LARGE
+        - UNSUPPORTED_MEDIA_TYPE
+        - ILLEGAL_CLIENT
+        - UNKNOWN
+    CommonResponse:
+      type: object
+      description: 通用返回消息，默认成功
+      required:
+        - code
+      properties:
+        message:
+          type: string
+          description: 处理消息
+        code:
+          $ref: '#/components/schemas/CommonCode'
+    PageQuery:
+      type: object
+      properties:
+        page_token:
+          type: integer
+          format: int32
+          description: 页码
+          default: 1
+        page_size:
+          type: integer
+          format: int32
+          description: 页面大小
+          maximum: 100
+          default: 20
+        sort:
+          type: string
+          description: 排序方式
+          default: DESC
+          enum:
+            - DESC #倒序
+            - ASC  #正序
+    TimeRange:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 起始时间
+          example: "2023-01-30T08:30:00Z"
+        end:
+          type: string
+          format: date-time
+          description: 终止时间
+          example: "2023-01-30T08:30:00Z"
+    Empty:
+      type: object
+    Location:
+      type: object
+      description: 位置信息，只能是火星坐标（GCJ-02），如果如果，自己特殊定义。
+      required:
+        - x
+        - y
+      properties:
+        x:
+          type: number
+          format: double
+          description: 经度 ←→  longitude   (简写 lon lng)
+          minimum: -180
+          maximum: 180
+        y:
+          type: number
+          format: double
+          description: 纬度 ↓↑  latitude    (简写 lat)
+          minimum: -90
+          maximum: 90
+    AreaLocation:
+      type: object
+      description: 区域信息, 有序坐标集合
+      properties:
+        locations:
+          type: array
+          items: { $ref: "#/components/schemas/Location" }
+    ClientType:
+      type: string
+      description: 客户端类型
+      enum:
+        - ANDROID
+        - IOS
+        - WX_MP
+        - ALI_MP

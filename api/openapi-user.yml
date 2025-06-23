@@ -1,0 +1,183 @@
+openapi: 3.0.2
+
+info:
+  version: 1.0.0
+  title: my-project
+  description: '用户接口'
+servers:
+  - url: http://localhost:20240
+    description: 本地测试
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+
+paths:
+  /api/lend/v1/user/wx-login:
+    x-ogen-operation-group: WxLogin
+    post:
+      operationId: WxLogin
+      tags:
+        - WxLogin
+      description: 微信登录
+
+      requestBody:
+        description: 微信登录参数
+        content:
+          application/json:
+            schema:
+              required:
+                - login_code
+              properties:
+                login_code:
+                  type: string
+                  description: 微信登录授权码 https://developers.weixin.qq.com/miniprogram/dev/api/open-api/login/wx.login.html
+      responses:
+        '200':
+          description: 微信登录结果
+          content:
+            application/json:
+              schema:
+                type: object
+                title: WxLoginResp
+                properties:
+                  user_info:
+                    $ref: './schemas/user.yml#/components/schemas/User'
+                  access_token:
+                    type: string
+                    description: 访问令牌
+                  message:
+                    type: string
+                    description: 消息
+                  code:
+                    type: string
+                    description: 错误码
+                    default: SUCCESS
+                    enum:
+                      - SUCCESS
+                      - UNBIND_PHONE
+        default:
+          description: 通用响应消息
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/common.yml#/components/schemas/CommonResponse'
+  /api/lend/v1/user/wx-phone:
+    x-ogen-operation-group: WxLogin
+    post:
+      operationId: WxPhone
+      tags:
+        - WxLogin
+      description: 微信绑定手机号并登录, 微信获取手机号需收费，不要重复调用
+      requestBody:
+        description: 微信登录参数
+        content:
+          application/json:
+            schema:
+              required:
+                - login_code
+              properties:
+                login_code:
+                  type: string
+                  description: 微信登录授权码 https://developers.weixin.qq.com/miniprogram/dev/api/open-api/login/wx.login.html
+                phone_code:
+                  type: string
+                  description: 微信手机授权码 https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
+      responses:
+        '200':
+          description: 微信绑定手机号
+          content:
+            application/json:
+              schema:
+                type: object
+                title: WxPhoneResp
+                allOf:
+                  - $ref: './schemas/common.yml#/components/schemas/CommonResponse'
+                  - type: object
+                    properties:
+                      user_info:
+                        $ref: './schemas/user.yml#/components/schemas/User'
+                      access_token:
+                        type: string
+                        description: 访问令牌
+        default:
+          description: 通用响应消息
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/common.yml#/components/schemas/CommonResponse'
+  /api/lend/v1/user/info:
+    x-ogen-operation-group: UserInfo
+    get:
+      operationId: UserInfo
+      tags:
+        - UserInfo
+      description: 获取当前用户信息，需登录
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: 用户信息
+          content:
+            application/json:
+              schema:
+                type: object
+                title: UserInfoResp
+                allOf:
+                  - $ref: './schemas/common.yml#/components/schemas/CommonResponse'
+                  - type: object
+                    properties:
+                      user_info:
+                        $ref: './schemas/user.yml#/components/schemas/User'
+        default:
+          description: 通用响应消息
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/common.yml#/components/schemas/CommonResponse'
+  /api/lend/v1/user/list:
+    x-ogen-operation-group: UserManage
+    post:
+      operationId: UserList
+      tags:
+        - UserManage
+      description: 获取用户列表，需登录，需管理员权限
+      security:
+        - bearer:
+            - admin
+      requestBody:
+        description: 获取用户列表参数
+        content:
+          application/json:
+            schema:
+              properties:
+                user_phone:
+                  type: string
+                  description: 手机号查询
+                user_name:
+                  type: string
+                  description: 用户名查询
+      responses:
+        '200':
+          description: 获取用户列表结果
+          content:
+            application/json:
+              schema:
+                type: object
+                title: UserListResp
+                allOf:
+                  - $ref: './schemas/common.yml#/components/schemas/CommonResponse'
+                  - type: object
+                    properties:
+                      user_list:
+                        type: array
+                        description: 用户列表
+                        items:
+                          - $ref: './schemas/user.yml#/components/schemas/User'
+        default:
+          description: 通用响应消息
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/common.yml#/components/schemas/CommonResponse'
