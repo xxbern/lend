@@ -7,6 +7,6 @@ import (
 )
 
 var Module = fx.Options(
-	user.UserModule,
-	rental.RentalModule,
+	user.Module,
+	rental.Module,
 )

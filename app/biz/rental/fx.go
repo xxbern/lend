@@ -6,7 +6,7 @@ import (
 	"lend/gen/oas"
 )
 
-var RentalModule = fx.Options(
+var Module = fx.Options(
 	fx.Provide(api.NewLendHandler),
 	fx.Provide(
 		fx.Annotate(

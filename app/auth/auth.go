@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"lend/app/config"
 )
 
 type key string
@@ -16,5 +15,5 @@ func WithAuthedUser(ctx context.Context, user *TokenUser) context.Context {
 }
 
 func AuthedUser(ctx context.Context) *TokenUser {
-	return (ctx.Value(config.KeyAuthedUser)).(*TokenUser)
+	return (ctx.Value(KeyAuthedUser)).(*TokenUser)
 }

@@ -11,25 +11,8 @@ import (
 	"time"
 )
 
-type Handler struct {
-	oas.WxLoginHandler
-	oas.UserManageHandler
-	oas.UserInfoHandler
-	oas.LendBizHandler
-}
-
-// NewServerHandler 解耦业务代码 不直接依赖api相关包
-func NewServerHandler(
-	uh oas.WxLoginHandler,
-	umh oas.UserManageHandler,
-	uih oas.UserInfoHandler,
-	lbh oas.LendBizHandler,
-) *Handler {
-	return &Handler{uh, umh, uih, lbh}
-}
-
 // NewHTTPServer 构造 handler 和 http.Server
-func NewHTTPServer(cfg *config.Config, handler *Handler) (*http.Server, error) {
+func NewHTTPServer(cfg *config.Config, handler oas.Handler) (*http.Server, error) {
 	oasServer, err := oas.NewServer(
 		handler,
 		SecurityHandler{},

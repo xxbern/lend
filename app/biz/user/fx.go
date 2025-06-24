@@ -7,7 +7,7 @@ import (
 	"lend/gen/oas"
 )
 
-var UserModule = fx.Options(
+var Module = fx.Options(
 	fx.Provide(dba.NewUserRepository),
 	fx.Provide(
 		fx.Annotate(

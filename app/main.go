@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	logx.Init(true)
+	logx.Init(false)
 
 	app := fx.New(
 		logx.FxLogger,
