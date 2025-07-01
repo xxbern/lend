@@ -21,15 +21,19 @@ paths:
       tags:
         - WxLogin
       description: 微信登录
-
       requestBody:
+        required: true
         description: 微信登录参数
         content:
           application/json:
             schema:
               required:
+                - appid
                 - login_code
               properties:
+                appid:
+                  type: string
+                  description: 微信小程序id
                 login_code:
                   type: string
                   description: 微信登录授权码 https://developers.weixin.qq.com/miniprogram/dev/api/open-api/login/wx.login.html
@@ -71,6 +75,7 @@ paths:
         - WxLogin
       description: 微信绑定手机号并登录, 微信获取手机号需收费，不要重复调用
       requestBody:
+        required: true
         description: 微信登录参数
         content:
           application/json:

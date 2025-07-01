@@ -9,6 +9,7 @@ require (
 	github.com/go-faster/jx v1.1.0
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
+	github.com/jinzhu/copier v0.4.0
 	github.com/ogen-go/ogen v1.14.0
 	github.com/spf13/viper v1.20.1
 	go.opentelemetry.io/otel v1.36.0

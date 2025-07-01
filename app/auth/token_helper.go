@@ -19,9 +19,14 @@ type MyTokenClaim struct {
 }
 
 const jwtKey = "AllYourBase"
+const appName = "lend"
 
 func (user *TokenUser) NewToken() (tokenStr string, err error) {
 	mySigningKey := []byte(jwtKey)
+	var role []string
+	if *user.IsAdmin {
+		role = []string{"admin"}
+	}
 
 	// Create the Claims
 	claims := &MyTokenClaim{
@@ -29,13 +34,10 @@ func (user *TokenUser) NewToken() (tokenStr string, err error) {
 			// A usual scenario is to set the expiration time relative to the current time
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			Issuer:    "lend",
+			Issuer:    appName,
 			Subject:   *user.Name,
 			ID:        strconv.Itoa(int(user.ID)),
-		},
-		[]string{
-			"admin",
-		},
+		}, role,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

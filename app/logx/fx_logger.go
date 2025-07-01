@@ -8,7 +8,6 @@ import (
 var FxLogger = fx.Logger(FuncPrinter{})
 
 type FuncPrinter struct {
-	f func(format string, args ...interface{})
 }
 
 func (FuncPrinter) Printf(format string, args ...interface{}) {

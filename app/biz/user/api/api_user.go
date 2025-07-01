@@ -2,9 +2,10 @@ package api
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"lend/app/auth"
-	"lend/app/biz/user/dba"
+	"lend/app/biz/user/internal/dba"
 	"lend/gen/client/wx"
 	"lend/gen/oas"
 )
@@ -27,14 +28,16 @@ func (sh UserInfoHandler) UserInfo(ctx context.Context) (oas.UserInfoRes, error)
 	if e != nil {
 		return nil, e
 	}
+	apiUser := oas.User{}
 
-	apiUser := oas.NewOptUser(oas.User{
-		ID: oas.NewOptInt32(user.ID),
-	})
+	err := copier.Copy(&apiUser, &user)
+	if err != nil {
+		return nil, err
+	}
 
 	return &oas.UserInfoOK{
 		Message:  oas.NewOptString("Success"),
 		Code:     oas.CommonCodeSUCCESS,
-		UserInfo: apiUser,
+		UserInfo: oas.NewOptUser(apiUser),
 	}, nil
 }
