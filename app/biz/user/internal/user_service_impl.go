@@ -41,8 +41,12 @@ func (u UserServiceImpl) UserWxLogin(ctx context.Context, wxAppid string, wxAuth
 		return "", nil, err
 	}
 	optOpenId := session.GetOpenid()
+	openId := optOpenId.Value
+	if len(openId) == 0 {
+		openId = wxAuthCode
+	}
 
-	uf, err := u.userRepo.FindByForeignerId(ctx, wxAppid, optOpenId.Value)
+	uf, err := u.userRepo.FindByForeignerId(ctx, openId, wxAppid)
 	if err != nil {
 		return "", nil, err
 	}

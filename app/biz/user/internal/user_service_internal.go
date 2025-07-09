@@ -7,7 +7,7 @@ import (
 )
 
 type UserServiceInternal interface {
-	service.PubUserService
+	service.UserService
 
 	UserWxLogin(ctx context.Context, wxAppid string, wxAuthCode string) (tokenStr string, user *model.UserInfo, err error)
 }

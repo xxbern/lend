@@ -13,9 +13,9 @@ var (
 	// 可以轻松添加更多错误类型
 )
 
-// PubUserService 提供外部服务，除了该包，内部所有子包不允许被外部依赖
+// UserService 提供外部服务，除了该包，内部所有子包不允许被外部依赖
 type (
-	PubUserService interface {
+	UserService interface {
 		FindUser(ctx context.Context, id int32) (*model.UserInfo, error)
 
 		DisableUser(ctx context.Context, id int32) error

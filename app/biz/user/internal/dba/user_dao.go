@@ -29,6 +29,10 @@ func (repo UserRepository) FindById(ctx context.Context, id int32) (*model.UserI
 	return repo.dq.UserInfo.WithContext(ctx).Where(repo.dq.UserInfo.ID.Eq(id)).FirstOrCreate()
 }
 
+func (repo UserRepository) UserList(ctx context.Context) ([]*model.UserInfo, error) {
+	return repo.dq.UserInfo.WithContext(ctx).Find()
+}
+
 func (repo UserRepository) DisableUser(ctx context.Context, id int32) error {
 	update, err := repo.dq.UserInfo.WithContext(ctx).Where(repo.dq.UserInfo.ID.Eq(id)).Update(repo.dq.UserInfo.IsDisable, true)
 	if err != nil {

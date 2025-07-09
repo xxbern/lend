@@ -14,3 +14,6 @@ components:
           type: integer
           format: int32
           description: 用户id
+        name:
+          type: string
+          description: 用户名

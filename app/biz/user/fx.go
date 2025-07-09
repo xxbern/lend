@@ -6,7 +6,6 @@ import (
 	"lend/app/biz/user/internal"
 	"lend/app/biz/user/internal/dba"
 	"lend/app/biz/user/service"
-	"lend/gen/oas"
 )
 
 // fx作为依赖注入框架，只关注实例构建和依赖管理，不应被其他代码依赖
@@ -16,29 +15,11 @@ var Module = fx.Options(
 	fx.Provide(dba.NewUserRepository),
 	fx.Provide(
 		fx.Annotate(
-			api.NewUserManageHandler,
-			// As 声明为oas相关包的实现 server支持注入oas接口
-			fx.As(new(oas.UserManageHandler)),
-		),
-	),
-	fx.Provide(
-		fx.Annotate(
-			api.NewUserInfoHandler,
-			fx.As(new(oas.UserInfoHandler)),
-		),
-	),
-	fx.Provide(
-		fx.Annotate(
-			api.NewWxLoginHandler,
-			fx.As(new(oas.WxLoginHandler)),
-		),
-	),
-	fx.Provide(
-		fx.Annotate(
 			internal.NewUserServiceImpl,
 			// 公开功能
-			fx.As(new(service.PubUserService)),
+			fx.As(new(service.UserService)),
 			// 内部功能
 			fx.As(new(internal.UserServiceInternal)),
 		)),
+	api.Module,
 )

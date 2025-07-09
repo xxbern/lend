@@ -179,7 +179,7 @@ paths:
                         type: array
                         description: 用户列表
                         items:
-                          - $ref: './schemas/user.yml#/components/schemas/User'
+                          $ref: './schemas/user.yml#/components/schemas/User'
         default:
           description: 通用响应消息
           content:
