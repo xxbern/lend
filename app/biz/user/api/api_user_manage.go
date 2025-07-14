@@ -15,13 +15,16 @@ func NewUserManageHandler(userRepo *dba.UserRepository) *UserManageHandler {
 }
 
 func (umh UserManageHandler) UserList(ctx context.Context, req oas.OptUserListReq) (oas.UserListRes, error) {
-	list, err := umh.userRepo.UserList(ctx)
+	listReq := req.Value
+	pageToken := listReq.PageToken.Or(0)
+	pageSize := listReq.PageSize.Or(20)
+	list, count, err := umh.userRepo.UserList(ctx, int(pageToken), int(pageSize))
 
 	if err != nil {
 		return nil, err
 	}
 
-	if len(list) == 0 {
+	if len(list) == 0 || count == 0 {
 		return &oas.UserListOK{
 			Message: oas.NewOptString("Success"),
 			Code:    oas.CommonCodeSUCCESS,
@@ -41,5 +44,6 @@ func (umh UserManageHandler) UserList(ctx context.Context, req oas.OptUserListRe
 		Message:  oas.NewOptString("Success"),
 		Code:     oas.CommonCodeSUCCESS,
 		UserList: resUser,
+		Total:    oas.NewOptInt64(count),
 	}, nil
 }
